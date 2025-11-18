@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Add Order</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background: #f7f7f8; }
         .card { border: none; border-radius: 12px; }
@@ -28,12 +28,22 @@
                     </div>
                 @endif
 
-                <form method="POST" action="/orders" novalidate>
+                <form method="POST" action="{{ route('orders.store') }}" novalidate>
                     @csrf
 
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select name="category_id" id="category" class="form-select" required>
+                            <option value="">Choose...</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="product" name="product" placeholder="Product" value="{{ old('product') }}" required>
-                        <label for="product">Product</label>
+                        <input type="text" class="form-control" id="item_name" name="item_name" placeholder="Item Name" value="{{ old('item_name') }}" required>
+                        <label for="item_name">Item Name</label>
                     </div>
 
                     <div class="form-floating mb-3">
@@ -57,6 +67,6 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

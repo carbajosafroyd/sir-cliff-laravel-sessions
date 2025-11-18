@@ -39,7 +39,7 @@
           <small class="text-muted">Manage your orders below</small>
         </div>
         <div>
-          <a href="{{ route('add_order') }}" class="btn btn-sm btn-light border">+ Add Order</a>
+          <a href="{{ route('orders.create') }}" class="btn btn-sm btn-light border">+ Add Order</a>
         </div>
       </div>
 
@@ -48,31 +48,31 @@
           <table class="table table-striped table-hover align-middle">
             <thead class="table-light">
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Product</th>
-                <th scope="col">Quantity</th>
+                <th scope="col">Item Name</th>
                 <th scope="col">Price</th>
+                <th scope="col">Category</th>
+                <th scope="col">Quantity</th>
                 <th scope="col">Total</th>
-                <th scope="col">Created</th>
+                <th scope="col">Created At</th>
                 <th scope="col" class="text-end">Actions</th>
               </tr>
             </thead>
             <tbody>
               @foreach ($orders as $order)
                 <tr>
-                  <td>{{ $order->id }}</td>
-                  <td>{{ $order->product }}</td>
+                  <td>{{ $order->item_name }}</td>
+                  <td>{{ $order->price }}</td>
+                  <td>{{ $order->category->name }}</td>
                   <td>{{ $order->quantity }}</td>
-                  <td>${{ number_format($order->price, 2) }}</td>
-                  <td>${{ number_format(($order->price ?? 0) * ($order->quantity ?? 0), 2) }}</td>
-                  <td class="text-muted small">{{ optional($order->created_at)->format('Y-m-d') }}</td>
-                  <td class="text-end">
-                    <a href="/orders/{{ $order->id }}/edit" class="btn btn-sm btn-outline-primary me-1">Edit</a>
-                    <form action="/orders/{{ $order->id }}" method="POST" class="d-inline-block" onsubmit="return confirm('Delete this order?');">
-                      @csrf
-                      @method('DELETE')
-                      <button class="btn btn-sm btn-outline-danger">Delete</button>
-                    </form>
+                  <td>{{ $order->price * $order->quantity }}</td>
+                  <td>{{ $order->created_at }}</td>
+                    <td class="text-end">
+                      <form action="{{ route('orders.destroy' ,$order->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this order?');">
+                        <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                      </form>
                   </td>
                 </tr>
               @endforeach
